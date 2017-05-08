@@ -98,7 +98,7 @@
 <meta property="og:description" content="####打开我们刚init 的 demo  ####分析一下他的实现原理参考资料1 React Native用iOS自带的JavaScriptCore作为JS的解析引擎，但并没有用到JavaScriptCore提供的一些可以让JS与OC互调的特性，而是自己实现了一套机制，这套机制可以通用于所有JS引擎上，在没有JavaScriptCore的情况下也可以用webview代替，实际上项目里就已经有了用">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1481580-4257de5271298ea7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1481580-f39d4179c7f90c30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-05-05T05:19:01.000Z">
+<meta property="og:updated_time" content="2017-05-08T02:00:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="react-native从入门到放弃（2)-运行原理">
 <meta name="twitter:description" content="####打开我们刚init 的 demo  ####分析一下他的实现原理参考资料1 React Native用iOS自带的JavaScriptCore作为JS的解析引擎，但并没有用到JavaScriptCore提供的一些可以让JS与OC互调的特性，而是自己实现了一套机制，这套机制可以通用于所有JS引擎上，在没有JavaScriptCore的情况下也可以用webview代替，实际上项目里就已经有了用">
@@ -202,7 +202,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -212,7 +212,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -282,7 +282,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-05T13:12:23+08:00">
                 2017-05-05
@@ -328,7 +328,7 @@
 <p>首先程序入口在AppDelegate中,我去掉了部分源码，我们只看有用的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@&quot;index.ios&quot; fallbackResource:nil];</div><div class="line"></div><div class="line">RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation</div><div class="line">moduleName:@&quot;AwesomeProject&quot;</div><div class="line">initialProperties:nil</div><div class="line">launchOptions:launchOptions];</div></pre></td></tr></table></figure>
 <p>进入 <strong>jsBundleURLForBundleRoot</strong> 方法我们来看一下内部的实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- (NSURL *)jsBundleURLForBundleRoot:(NSString *)bundleRoot fallbackResource:(NSString *)resourceName</div><div class="line">&#123;</div><div class="line">resourceName = resourceName ?: @&quot;main&quot;;</div><div class="line">NSString *packagerServerHost = [self packagerServerHost];</div><div class="line">if (!packagerServerHost) &#123;</div><div class="line">return [[NSBundle mainBundle] URLForResource:resourceName withExtension:@&quot;jsbundle&quot;];</div><div class="line">&#125; else &#123;</div><div class="line">NSString *path = [NSString stringWithFormat:@&quot;/%@.bundle&quot;, bundleRoot];</div><div class="line">// When we support only iOS 8 and above, use queryItems for a better API.</div><div class="line">NSString *query = [NSString stringWithFormat:@&quot;platform=ios&amp;dev=%@&amp;minify=%@&quot;,</div><div class="line">[self enableDev] ? @&quot;true&quot; : @&quot;false&quot;,</div><div class="line">[self enableMinification] ? @&quot;true&quot;: @&quot;false&quot;];</div><div class="line">return [[self class] resourceURLForResourcePath:path packagerHost:packagerServerHost query:query];</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- (NSURL *)jsBundleURLForBundleRoot:(NSString *)bundleRoot fallbackResource:(NSString *)resourceName</div><div class="line">&#123;</div><div class="line">    resourceName = resourceName ?: @&quot;main&quot;;</div><div class="line">    NSString *packagerServerHost = [self packagerServerHost];</div><div class="line">    if (!packagerServerHost) &#123;</div><div class="line">        return [[NSBundle mainBundle] URLForResource:resourceName withExtension:@&quot;jsbundle&quot;];</div><div class="line">    &#125; else &#123;</div><div class="line">        NSString *path = [NSString stringWithFormat:@&quot;/%@.bundle&quot;, bundleRoot];</div><div class="line">        // When we support only iOS 8 and above, use queryItems for a better API.</div><div class="line">        NSString *query = [NSString stringWithFormat:@&quot;platform=ios&amp;dev=%@&amp;minify=%@&quot;,</div><div class="line">        [self enableDev] ? @&quot;true&quot; : @&quot;false&quot;,</div><div class="line">        [self enableMinification] ? @&quot;true&quot;: @&quot;false&quot;];</div><div class="line">        return [[self class] resourceURLForResourcePath:path packagerHost:packagerServerHost query:query];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><a href="http://blog.csdn.net/xiangzhihong8/article/details/52623852" target="_blank" rel="external">参考资料3</a></p>
 
       
@@ -438,7 +438,7 @@
             <div class="site-state-item site-state-posts">
               <a href="/archives">
                 <span class="site-state-item-count">2</span>
-                <span class="site-state-item-name">posts</span>
+                <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
           
@@ -492,7 +492,7 @@
 
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
