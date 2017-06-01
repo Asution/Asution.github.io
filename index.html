@@ -143,12 +143,12 @@
 <!-- Theme Background Related-->
 
     <style>
-      body{
+      body {
         background-color: #F5F5F5;
       }
 
       /* blog_info bottom background */
-      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
         background-color: #fff;
       }
     </style>
@@ -195,6 +195,12 @@
 
     <!-- Bing Background -->
     
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
 
     <!-- Custom Head -->
     
@@ -231,7 +237,7 @@
         <p class="index-top-block-slogan"><a href="#">
         
             
-                Hi, nice to meet you
+                倘能生存，我当然仍要学习。
             
         
         </a></p>
@@ -901,7 +907,7 @@ React Native用iOS自带的JavaScriptCore作为JS的解...
 
     var locatePost = $('.locate-thumbnail-symbol').next();
     for(var i = 0; i < 10; i++) {
-        randomNum = Math.floor(Math.random() * 19 + 1);
+        randomNum = Math.floor(Math.random() * 8 + 1);
 
         locatePost.children('.post_thumbnail-random').attr('id', 'random_thumbnail-'+randomNum);
         locatePost.children('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
