@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.3 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            react-native从入门到放弃（2）从ios端来看RN运行原理 | 
+        
+        崔浩楠 Blog
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="asution deployment">
+    <meta name="description" content="start from zero">
+    <meta name="keywords" content="null,React-native">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="崔浩楠 Blog">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://asution.github.io">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="react-native从入门到放弃（2）从ios端来看RN运行原理 | 崔浩楠 Blog">
+    <meta property="og:description" content="start from zero">
+    <meta property="og:article:tag" content="React-native"> 
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.zhCN.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RN-与-Objective-C-之间的通信"><span class="post-toc-number">1.</span> <span class="post-toc-text">RN 与 Objective-C 之间的通信</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#注意"><span class="post-toc-number">2.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#参考文章"><span class="post-toc-number">3.</span> <span class="post-toc-text">参考文章</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                react-native从入门到放弃（2）从ios端来看RN运行原理
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>asution deployment</strong>
+        <span>5月 05, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/React-native/">React-native</a>
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=react-native从入门到放弃（2）从ios端来看RN运行原理&url=http://asution.github.io//2017/05/05/react-native从入门到放弃（2）从ios端来看RN运行原理/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                分享到微博
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=react-native从入门到放弃（2）从ios端来看RN运行原理&url=http://asution.github.io//2017/05/05/react-native从入门到放弃（2）从ios端来看RN运行原理/index.html&via=asution deployment" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://asution.github.io//2017/05/05/react-native从入门到放弃（2）从ios端来看RN运行原理/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://asution.github.io//2017/05/05/react-native从入门到放弃（2）从ios端来看RN运行原理/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p>打开我们刚init 的 demo，分析一下他的实现原理</p>
+<p>React Native用iOS自带的JavaScriptCore作为JS的解析引擎，但并没有用到JavaScriptCore提供的一些可以让JS与OC互调的特性，而是自己实现了一套机制，这套机制可以通用于所有JS引擎上，在没有JavaScriptCore的情况下也可以用webview代替，实际上项目里就已经有了用webview作为解析引擎的实现，应该是用于兼容iOS7以下没有JavascriptCore的版本。<br>普通的JS-OC通信实际上很简单，OC向JS传信息有现成的接口，像webview提供的-stringByEvaluatingJavaScriptFromString方法可以直接在当前context上执行一段JS脚本，并且可以获取执行后的返回值，这个返回值就相当于JS向OC传递信息。React Native也是以此为基础，通过各种手段，实现了在OC定义一个模块方法，JS可以直接调用这个模块方法并还可以无缝衔接回调。</p>
+<h3 id="RN-与-Objective-C-之间的通信"><a href="#RN-与-Objective-C-之间的通信" class="headerlink" title="RN 与 Objective-C 之间的通信"></a>RN 与 Objective-C 之间的通信</h3><p>Objective-C 和 JavaScript 两端都保存了一份配置表，里面标记了所有 Objective-C 暴露给 JavaScript 的模块和方法。这样，无论是哪一方调用另一方的方法，实际上传递的数据只有 ModuleId、MethodId 和 Arguments<br> 这三个元素，它们分别表示类、方法和方法参数，当 Objective-C 接收到这三个值后，就可以通过 runtime 唯一确定要调用的是哪个函数，然后调用这个函数。</p>
+<p>这里有一个<strong>模块配置表</strong>的概念<br>首先OC要告知JS它有什么模块，模块内的方法，参数。JS知道后才可能去调用这些方法。<br>OC端和JS端分别各有一个bridge，两个bridge都保存了同样一份模块配置表，JS调用OC模块方法时，通过bridge里的配置表把模块方法转为模块ID和方法ID传给OC，OC通过bridge的模块配置表找到对应的方法执行</p>
+<p>闭包与回调<br>既然说到函数互调，那么就不得不提到回调了。对于 Objective-C 来说，执行完 JavaScript 代码再执行 Objective-C 回调毫无难度，难点依然在于 JavaScript 代码调用 Objective-C 之后，如何在 Objective-C 的代码中，回调执行 JavaScript 代码。<br>目前 React Native 的做法是：在 JavaScript 调用 Objective-C 代码时，注册要回调的 Block，并且把 BlockId<br> 作为参数发送给 Objective-C，Objective-C 收到参数时会创建 Block，调用完 Objective-C 函数后就会执行这个刚刚创建的 Block。<br>Objective-C 会向 Block 中传入参数和 BlockId<br>，然后在 Block 内部调用 JavaScript 的方法，随后 JavaScript 查找到当时注册的 Block 并执</p>
+<p>看完原理我们来看一下React Native的源码，我的RN Version 是0.44</p>
+<p>首先程序入口在AppDelegate中,我去掉了部分源码，我们只看有用的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@&quot;index.ios&quot; fallbackResource:nil];</div><div class="line"></div><div class="line">RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation</div><div class="line">                                                      moduleName:@&quot;AwesomeProject&quot;</div><div class="line">                                               initialProperties:nil</div><div class="line">                                                   launchOptions:launchOptions];</div></pre></td></tr></table></figure>
+<p>进入 <strong>jsBundleURLForBundleRoot</strong> 方法我们来看一下内部的实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- (NSURL *)jsBundleURLForBundleRoot:(NSString *)bundleRoot fallbackResource:(NSString *)resourceName</div><div class="line">&#123;</div><div class="line">  resourceName = resourceName ?: @&quot;main&quot;;</div><div class="line">  NSString *packagerServerHost = [self packagerServerHost];</div><div class="line">  if (!packagerServerHost) &#123;</div><div class="line">    return [[NSBundle mainBundle] URLForResource:resourceName withExtension:@&quot;jsbundle&quot;];</div><div class="line">  &#125; else &#123;</div><div class="line">    NSString *path = [NSString stringWithFormat:@&quot;/%@.bundle&quot;, bundleRoot];</div><div class="line">    // When we support only iOS 8 and above, use queryItems for a better API.</div><div class="line">    NSString *query = [NSString stringWithFormat:@&quot;platform=ios&amp;dev=%@&amp;minify=%@&quot;,</div><div class="line">                       [self enableDev] ? @&quot;true&quot; : @&quot;false&quot;,</div><div class="line">                       [self enableMinification] ? @&quot;true&quot;: @&quot;false&quot;];</div><div class="line">    return [[self class] resourceURLForResourcePath:path packagerHost:packagerServerHost query:query];</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法创建了一个本地的js文件访问URL.<br>继续向下走</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">- (instancetype)initWithBundleURL:(NSURL *)bundleURL</div><div class="line">                       moduleName:(NSString *)moduleName</div><div class="line">                initialProperties:(NSDictionary *)initialProperties</div><div class="line">                    launchOptions:(NSDictionary *)launchOptions</div><div class="line">&#123;</div><div class="line">  RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:bundleURL</div><div class="line">                                            moduleProvider:nil</div><div class="line">                                             launchOptions:launchOptions];</div><div class="line"></div><div class="line">  return [self initWithBridge:bridge moduleName:moduleName initialProperties:initialProperties];</div><div class="line">&#125;</div><div class="line"></div><div class="line">initWithBundleURL参数分析</div><div class="line">**bundleURL : 初始化是我们创建的URL</div><div class="line">moduleProvider : 此块可用于实例化需要额外的模块(这一块我们后期再深入的了解，先留一个疑问，暂时不传)</div><div class="line">launchOptions : 加载的参数**</div></pre></td></tr></table></figure>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>此时我们的线程是保持在主线程中执行,在setUp方法中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">void RCTExecuteOnMainQueue(dispatch_block_t block)</div><div class="line">&#123;</div><div class="line">  if (RCTIsMainQueue()) &#123;</div><div class="line">    block();</div><div class="line">  &#125; else &#123;</div><div class="line">    dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">      block();</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>首先创建了一个RCTBridge对象，通过文档我们知道，它是一个异步批量链接JavaScript应用程序通信。<br><strong>Async batched bridge used to communicate with the JavaScript application.</strong><br><strong>RCTBridge</strong>对象起到了桥接两端的作用,具体实现要在RCTBatchedBridge 类中的 <strong>start</strong>方法内, start中执行了重要的初始化任务,也是RN的精髓,基于大量的GCD实现了异步初始化组件框架的任务.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">- (void)start</div><div class="line">&#123;</div><div class="line">  //将要开始加载的通知</div><div class="line">  [[NSNotificationCenter defaultCenter]</div><div class="line">    postNotificationName:RCTJavaScriptWillStartLoadingNotification</div><div class="line">    object:_parentBridge userInfo:@&#123;@&quot;bridge&quot;: self&#125;];</div><div class="line"></div><div class="line">  //为事件收集初始事件信息并返回引用ID</div><div class="line">  RCT_PROFILE_BEGIN_EVENT(0, @&quot;-[RCTBatchedBridge setUp]&quot;, nil);</div><div class="line"></div><div class="line">  dispatch_queue_t bridgeQueue = dispatch_queue_create(&quot;com.facebook.react.RCTBridgeQueue&quot;, DISPATCH_QUEUE_CONCURRENT);</div><div class="line"></div><div class="line">  dispatch_group_t initModulesAndLoadSource = dispatch_group_create();</div><div class="line"></div><div class="line">  // Asynchronously load source code</div><div class="line">  dispatch_group_enter(initModulesAndLoadSource);</div><div class="line">  __weak RCTBatchedBridge *weakSelf = self;</div><div class="line">  __block NSData *sourceCode;</div><div class="line">  // RCTMultipartDataTask 类做网络请求, 基于NSURLSession, 获得javascript data</div><div class="line">  [self loadSource:^(NSError *error, NSData *source, __unused int64_t sourceLength) &#123;</div><div class="line">    if (error) &#123;</div><div class="line">      RCTLogWarn(@&quot;Failed to load source: %@&quot;, error);</div><div class="line">      dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">        [weakSelf stopLoadingWithError:error];</div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    sourceCode = source;</div><div class="line">    dispatch_group_leave(initModulesAndLoadSource);</div><div class="line">  &#125; onProgress:^(RCTLoadingProgress *progressData) &#123;</div><div class="line">#if RCT_DEV &amp;&amp; __has_include(&quot;RCTDevLoadingView.h&quot;)</div><div class="line">    RCTDevLoadingView *loadingView = [weakSelf moduleForClass:[RCTDevLoadingView class]];</div><div class="line">    [loadingView updateProgress:progressData];</div><div class="line">#endif</div><div class="line">  &#125;];</div><div class="line"></div><div class="line">  // 同步初始化所有不能被懒惰加载的本机模块</div><div class="line">  // Synchronously initialize all native modules that cannot be loaded lazily</div><div class="line">  [self initModulesWithDispatchGroup:initModulesAndLoadSource];</div><div class="line"></div><div class="line">  RCTPerformanceLogger *performanceLogger = self-&gt;_performanceLogger;</div><div class="line">  __block NSString *config;</div><div class="line">  dispatch_group_enter(initModulesAndLoadSource);</div><div class="line">  dispatch_async(bridgeQueue, ^&#123;</div><div class="line">    dispatch_group_t setupJSExecutorAndModuleConfig = dispatch_group_create();</div><div class="line"></div><div class="line">    // Asynchronously initialize the JS executor</div><div class="line">    dispatch_group_async(setupJSExecutorAndModuleConfig, bridgeQueue, ^&#123;</div><div class="line">      [performanceLogger markStartForTag:RCTPLJSCExecutorSetup];</div><div class="line">      [weakSelf setUpExecutor];</div><div class="line">      [performanceLogger markStopForTag:RCTPLJSCExecutorSetup];</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    // Asynchronously gather the module config</div><div class="line">    dispatch_group_async(setupJSExecutorAndModuleConfig, bridgeQueue, ^&#123;</div><div class="line">      if (weakSelf.valid) &#123;</div><div class="line">        RCT_PROFILE_BEGIN_EVENT(0, @&quot;-[RCTBatchedBridge moduleConfig&quot;, nil);</div><div class="line">        [performanceLogger markStartForTag:RCTPLNativeModulePrepareConfig];</div><div class="line">        config = [weakSelf moduleConfig];</div><div class="line">        [performanceLogger markStopForTag:RCTPLNativeModulePrepareConfig];</div><div class="line">        RCT_PROFILE_END_EVENT(RCTProfileTagAlways, @&quot;&quot;);</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    dispatch_group_notify(setupJSExecutorAndModuleConfig, bridgeQueue, ^&#123;</div><div class="line">      // We&apos;re not waiting for this to complete to leave dispatch group, since</div><div class="line">      // injectJSONConfiguration and executeSourceCode will schedule operations</div><div class="line">      // on the same queue anyway.</div><div class="line">      //利用 javaScriptCore 引擎为 native 设置方法和属性</div><div class="line">      [performanceLogger markStartForTag:RCTPLNativeModuleInjectConfig];</div><div class="line">      [weakSelf injectJSONConfiguration:config onComplete:^(NSError *error) &#123;</div><div class="line">        [performanceLogger markStopForTag:RCTPLNativeModuleInjectConfig];</div><div class="line">        if (error) &#123;</div><div class="line">          RCTLogWarn(@&quot;Failed to inject config: %@&quot;, error);</div><div class="line">          dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">            [weakSelf stopLoadingWithError:error];</div><div class="line">          &#125;);</div><div class="line">        &#125;</div><div class="line">      &#125;];</div><div class="line">      dispatch_group_leave(initModulesAndLoadSource);</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  //拿到请求后的javascript data 进行解码</div><div class="line">  dispatch_group_notify(initModulesAndLoadSource, bridgeQueue, ^&#123;</div><div class="line">    RCTBatchedBridge *strongSelf = weakSelf;</div><div class="line">    if (sourceCode &amp;&amp; strongSelf.loading) &#123;</div><div class="line">      [strongSelf executeSourceCode:sourceCode];</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  RCT_PROFILE_END_EVENT(RCTProfileTagAlways, @&quot;&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>基本流程图</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1481580-e585b5430a581b2d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="RN启动流程.png"></p>
+<p>启动流程部分大概就这样，理解了从加载URL/local path 到 通过 jsCore引擎来加载到应用层的基本逻辑，后面继续探索他的原理以及其他的使用技巧，<strong>理解原理后才能更好的去使用RN</strong><br>下面就是将RN应用到自己的项目中开始AwesomeProject 之旅</p>
+<p>有问题欢迎评论指正，我会及时进行修改。</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://lib.csdn.net/xiangzhihong8/5375/chart/React%20Native" target="_blank" rel="external">React Native 知识库</a><br><a href="http://blog.cnbang.net/tech/2698/" target="_blank" rel="external">React Native通信机制详解</a><br><a href="http://www.jianshu.com/p/978c4bd3a759" target="_blank" rel="external">React Native 从入门到原理</a><br><a href="http://blog.csdn.net/xiangzhihong8/article/details/52623852" target="_blank" rel="external">React Native运行原理解析 android</a><br><a href="https://github.com/crazycodeboy/RNStudyNotes/blob/master/React%20Native%E5%8E%9F%E7%94%9F%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91/React%20Native%20%E4%B8%8E%20iOS%20%E5%8E%9F%E7%94%9F%E5%BA%94%E7%94%A8%E9%97%B4%E9%80%9A%E4%BF%A1.md" target="_blank" rel="external">React-Native 与 iOS原生项目间通信(已有项目添加RN)</a></p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/05/10/react-native从入门到放弃（3）属性与状态/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/05/05/react-native从入门到放弃（1）环境搭建/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.png" alt="asution deployment's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        youremail@email.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                主页
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    归档
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/05/">五月 2017<span class="sidebar_archives-count">9</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            主题 - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+        <a href="https://twitter.com/twitter" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-twitter.svg);">
+                <span class="visuallyhidden">Twitter</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/facebook" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+        <a href="https://www.google.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-gplus.svg);">
+                <span class="visuallyhidden">Google Plus</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;崔浩楠 Blog
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setTimeout(function(){
+            setInterval(function(){
+                queue.execNext();
+            },200);
+        },3000);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

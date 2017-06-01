@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.3 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            计算机中的进制 | 
+        
+        崔浩楠 Blog
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="asution deployment">
+    <meta name="description" content="start from zero">
+    <meta name="keywords" content="null,基础">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="崔浩楠 Blog">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://asution.github.io">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="计算机中的进制 | 崔浩楠 Blog">
+    <meta property="og:description" content="start from zero">
+    <meta property="og:article:tag" content="基础"> 
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.zhCN.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#热身题-1"><span class="post-toc-number">1.</span> <span class="post-toc-text">热身题 1)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是二进制数"><span class="post-toc-number">2.</span> <span class="post-toc-text">什么是二进制数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#左移运算符"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">左移运算符</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#补数"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">补数</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#右移运算符"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">右移运算符</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#逻辑运算"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">逻辑运算</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#热身题-1-答案"><span class="post-toc-number">3.</span> <span class="post-toc-text">热身题 1) 答案</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#热身题-2"><span class="post-toc-number">4.</span> <span class="post-toc-text">热身题 2)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#小数"><span class="post-toc-number">5.</span> <span class="post-toc-text">小数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#符号"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">符号</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#尾数"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">尾数</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#指数"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">指数</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#热身题-2-答案"><span class="post-toc-number">6.</span> <span class="post-toc-text">热身题 2)答案</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                计算机中的进制
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>asution deployment</strong>
+        <span>5月 31, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/基础/">基础</a>
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=计算机中的进制&url=http://asution.github.io//2017/05/31/计算机中的进制/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                分享到微博
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=计算机中的进制&url=http://asution.github.io//2017/05/31/计算机中的进制/index.html&via=asution deployment" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://asution.github.io//2017/05/31/计算机中的进制/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://asution.github.io//2017/05/31/计算机中的进制/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h4 id="热身题-1"><a href="#热身题-1" class="headerlink" title="热身题 1)"></a>热身题 1)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1.32位是几个字节？</div><div class="line">2.二进制数01011100转换成十进制数是多少?</div><div class="line">3.二进制数00001111左移二位后，会变成原数的几倍？</div><div class="line">4.补码形式表示的8位二进制数11111111，用十进制表示？</div><div class="line">5.补码形式表示的8位二进制数10101010，用16位二进制数表示?</div><div class="line">6.反转部分图形模式时，使用的是什么逻辑运算？</div></pre></td></tr></table></figure>
+<p>计算机内部是由IC（Integrated Circuit）这种电子部件构成，CPU和内存也是IC的一种。IC的所有引脚只有直流电压0V或5V两个状态。也就是说，IC的一个引脚，只能表示两个状态。<br>二进制由 0，1 表示。</p>
+<p>二进制的位数一般是8位，16位，32位······ 也就是8的倍数，计算机所处理的基本单位是8位二进制数。8位二进制数为一个字节。字节为基本的信息计量单位。</p>
+<p>如果小于存储数据的字节数，那么高位上就由 0 填补。<br>8位  ： 100111 -&gt; 00100111<br>16位： 100111 -&gt; 0000000000100111<br>32位处理器则一次可以处理4字节二进制数信息</p>
+<p>无论是十进制数还是文字等信息，最终都会转成二进制表示信息。计算机不会区分它是数值、文字、还是某种图片的模式等，具体进行何种处理，取决于程序编写方式。</p>
+<h4 id="什么是二进制数"><a href="#什么是二进制数" class="headerlink" title="什么是二进制数"></a>什么是二进制数</h4><p>原理：二进制数的值转换成十进制数的值，只需要将二进制的各位数的值和位权相乘，然后将相乘结果相加即可。</p>
+<p>例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">39这个数值， 拆分来看是 3 * 10 + 9 * 1 。</div><div class="line">这里各个位数的数值相乘的 10 和 1 ，就是位权。</div><div class="line">如果放入二进制数中来表达</div><div class="line">即第1位是2的0次幂，第2位是2的1次幂，第3位是2的2次幂。依次类推。</div><div class="line">在十进制中 基数 为10 ， 二进制中基数为 2。</div></pre></td></tr></table></figure></p>
+<p>二进制数00100111用十进制数表示是39，因为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(0 * 128) + (0 * 64) + (1 * 32) + (0 * 16) + (0 * 8) + (1 * 4) </div><div class="line">+ (1 * 2) + (1 * 1) = 39</div></pre></td></tr></table></figure></p>
+<h5 id="左移运算符"><a href="#左移运算符" class="headerlink" title="左移运算符"></a>左移运算符</h5><p>“&lt;&lt;”，左移一位为原数值的2倍，以此类推<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">a = 10;</div><div class="line">b = a &lt;&lt; 2;</div><div class="line"></div><div class="line">左移后空出来的位数由0进行补位，但只适合 &lt;&lt;，</div><div class="line">&gt;&gt; 时，用来填充右移后空出来的高位值，有0，1两种形式</div></pre></td></tr></table></figure></p>
+<h5 id="补数"><a href="#补数" class="headerlink" title="补数"></a>补数</h5><p>二进制中表示负数时将最高位作为符号来使用，一般把最高位成为符号位，符号位是0表示正数，1表示负数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">0 0 0 0 0 0 0 1</div><div class="line">最高位指向第一个位，也就是第一个0</div></pre></td></tr></table></figure></p>
+<p>计算机在做减法运算时，实际上内部是在做加法运算。为此，在表示负数时就需要使用 二进制的补数，补数就是用正数来表示负数。<br>其实获取补数其实就是对二进制的各位数值全部取反，然后结果加1，例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">0 0 0 0 0 0 0 1 原始数值</div><div class="line">1 1 1 1 1 1 1 0 取反</div><div class="line">1 1 1 1 1 1 1 1 加一，完成获取补数</div></pre></td></tr></table></figure>
+<p>例 1 - 1，也就是 1 + (-1)，答案是0。如果将-1表示为10000001来计算，结果则不为0。<br>错误的运算：00000001 + 10000001 = 10000010<br>正确的运算：00000001 + 11111111   = 100000000<br>如果-1表示为11111111进行运算，出现了最高位溢出的情况，不过，对于溢出的位，计算机会直接忽略掉。<br>100000000 这个9位二进制会被认为是 00000000。<br>补数求解的变换方法就是 “ 取反 + 1 ”。</p>
+<h5 id="右移运算符"><a href="#右移运算符" class="headerlink" title="右移运算符"></a>右移运算符</h5><p>“&gt;&gt;”，区分逻辑右移和算术右移<br>逻辑右移：在二进制数的值表示图形模式而非数值时，移位后需要在最高位补0<br>算术右移：将二进制数作为带符号的数值进行运算时，移位后要在最高位填充 0 或 1。如果值为负数，那么右移后空出来的最高位补1，就可以正确实现1/2,1/4,1/8等。如果是正数，需要在最高位补0即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-4（11111100）右移两位</div><div class="line">此时，逻辑右移下结果就会变为 00111111，也就是十进制63，并非为 -4的1/4。</div><div class="line">而算术右移的情况，结果就会变为11111111，补数表示也就是-1。</div></pre></td></tr></table></figure></p>
+<p>只有在右移时需要区分，左移只需要补0即可。</p>
+<p>符号扩充：在保持值不变的前提下将其转成16位和32位二进制数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">8位  : 01111111</div><div class="line">16位 : 0000000001111111</div></pre></td></tr></table></figure></p>
+<p>不管是证书还是补位数表示的负数，都只需用符号位的值（0或1）填充高位即可。</p>
+<h5 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h5><p>逻辑运算指对二进制数各数字位的0和1分别进行处理的运算，包括 逻辑非(NOT)、逻辑与(AND)、逻辑或(OR)、逻辑异或(XOR，exclusive or)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">逻辑非（NOT）指的是 0 变 1， 1 变 0 的取反操作</div><div class="line">0 -&gt; 1 </div><div class="line">1 -&gt; 0</div><div class="line"></div><div class="line">逻辑与（and）两个数都是1时结果为1，其他情况为0</div><div class="line">0  0 -&gt; 0</div><div class="line">0  1 -&gt; 0</div><div class="line">1  0 -&gt; 0</div><div class="line">1  1 -&gt; 1</div><div class="line"></div><div class="line">逻辑或（or）至少一方是1时结果为1，其他情况为0</div><div class="line">0  0 -&gt; 0</div><div class="line">0  1 -&gt; 1</div><div class="line">1  0 -&gt; 1</div><div class="line">1  1 -&gt; 1</div><div class="line"></div><div class="line">逻辑异或（xor）排斥相同数值的运算</div><div class="line">0  0 -&gt; 0</div><div class="line">0  1 -&gt; 1</div><div class="line">1  0 -&gt; 1</div><div class="line">1  1 -&gt; 0</div></pre></td></tr></table></figure></p>
+<h4 id="热身题-1-答案"><a href="#热身题-1-答案" class="headerlink" title="热身题 1) 答案"></a>热身题 1) 答案</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1.  4</div><div class="line">2.  92</div><div class="line">3.  4倍</div><div class="line">4.  -1</div><div class="line">5.  1111111110101010</div><div class="line">6.  XOR运算</div></pre></td></tr></table></figure>
+<h4 id="热身题-2"><a href="#热身题-2" class="headerlink" title="热身题 2)"></a>热身题 2)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1.二进制数0.1用十进制数表示是多少？</div><div class="line">2.用小数点后又3位的二进制数，能表示十进制数0.625吗？</div><div class="line">3.将小数分为符号、尾数、基数、指数4部分进行表现的形式成为什么？</div><div class="line">4.二进制数的基数是多少？</div><div class="line">5.通过把0作为述职范围的中间值，从而在不适用符号位的情况下表示负数的表示方法称为什么？</div><div class="line">6.10101100.01010011二进制，用十六进制表示是多少？</div></pre></td></tr></table></figure>
+<p>例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1011.0011 二进制数转换为十进制数</div><div class="line">小数点前的部分的位权，第1位是2的0次幂，第2位是1次幂，依次类推。</div><div class="line">小数点后面的位权，第1位是-1次幂，第2位是-2次幂，依次类推。</div><div class="line"></div><div class="line">(1 * 8) + (0 * 4) + (1 * 2) + (1 * 1) + (0 * 0.5) + (0 * 0.25) + </div><div class="line">(1 * 0.125) + (1 * 0.0625) = 11.1875;</div></pre></td></tr></table></figure></p>
+<p>那为什么计算机会计算错误呢? 因为 “有一些十进制数的小数无法转换成二进制数”。 例 0.1，就无法用二进制数正确表示，小数后面即使有几百位也无法表示。<br>小数点后4位用二进制数表示时的数值范围 0.0000 ~ 0.1111，因此，这里只能表示 0.5 、0.25、0.00625 这几个二进制数小数点后面的权位组合而成的小数。<br>例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">二进制：0.0000  0.0001   ···</div><div class="line">十进制：0       0.0625   ···</div></pre></td></tr></table></figure></p>
+<p>在 0 和 0.0625中间的小数，就无法用小数点后4位数的二进制数来表示。依次类推。 十进制数0.1转换为二进制数时会变成 1100这样的循环小数，计算机功这个功能有限的设备，无法处理循环小数，当遇到此类情况，会进行四舍五入。</p>
+<p><strong>浮点数由 符号、尾数、基数、指数组成</strong><br>在 64位中称为双精度浮点数，符号部分 1位，指数部分 11位，尾数部分 52位。<br>在 32位中称为单精度浮点数，符号部分 1位，指数部分 8位，尾数部分 23位。</p>
+<p>双精度浮点数和单精度浮点数在表示同一数值时使用的位数不同。双精度浮点数能够表示的数值范围较大。</p>
+<h4 id="小数"><a href="#小数" class="headerlink" title="小数"></a>小数</h4><h5 id="符号"><a href="#符号" class="headerlink" title="符号"></a>符号</h5><p><strong>符号：使用一个数据位来表示数值的符号。该数据为1表示负，0表示 “正或者0”。数值的大小用尾数部分和指数部分来表示。</strong>这里不用纠结它们是做什么的后面接着看。</p>
+<h5 id="尾数"><a href="#尾数" class="headerlink" title="尾数"></a>尾数</h5><p><strong>尾数部分</strong>使用<strong>正则表达式</strong>。在数学中，例如 十进制数0.75就有很多种表现形式。虽然它们表示的都是同一个数值，但因为表现方法太多，计算机处理相对麻烦，所以为了方便处理，需要定制一套规则。<br>例如， 十进制的浮点数应该遵循“小数点前面是0，小数点后面第1位不能是0” 这样的规定。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0.75就是 0.75 * 10 的0次幂。</div></pre></td></tr></table></figure>
+<p>当然在二进制数中也同样适用，在二进制中 ，将小数点前面的值固定为1的正则表达式。</p>
+<h5 id="指数"><a href="#指数" class="headerlink" title="指数"></a>指数</h5><p><strong>指数部分</strong>中使用EXCESS系统，使用这种方法主要是为了表示负数时不能使用符号位。在某些情况下，指数部分需要通过 <strong>负OO次幂的形式来表示负数</strong>。<br>EXCESS系统指，通过将指数部分表示范围的中间值设为0，是的附属不需要用符号来表示。<br>我们将EXCESS系统比作 1 ~ 13 这些值。 取中间的5这这个值当成0，7就表示+2，3就表示-2。这个规则就是EXCESS系统。</p>
+<p>例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">static void number()&#123;</div><div class="line">    float data;</div><div class="line">    unsigned long buff;</div><div class="line">    int i;</div><div class="line">    char s[34];</div><div class="line">    </div><div class="line">    //以单精度浮点数储存</div><div class="line">    data = (float)0.75;</div><div class="line">    </div><div class="line">    //将数据复制到 4 字节长度的整数变量 buff 中</div><div class="line">    memcpy(&amp;buff, &amp;data, 4);</div><div class="line">    </div><div class="line">    for (i = 33; i &gt;= 0; i--) &#123;</div><div class="line">        if (i == 1 || i == 10) &#123;</div><div class="line">            //将各个部分划分</div><div class="line">            s[i] = &apos;-&apos;;</div><div class="line">        &#125; else &#123;</div><div class="line">            if(buff % 2 == 1)&#123;</div><div class="line">                s[i] = &apos;1&apos;;</div><div class="line">            &#125;else&#123;</div><div class="line">                s[i] = &apos;0&apos;;</div><div class="line">            &#125;</div><div class="line">            buff /= 2;</div><div class="line">        &#125;</div><div class="line">        printf(&quot;%lu\n&quot;,buff);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    s[33] = &apos;\0&apos;;</div><div class="line">    </div><div class="line">    printf(&quot;%s\n&quot;,s);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出，十进制0.75用单精度浮点数表示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0-01111110-1000000000000000000000</div></pre></td></tr></table></figure>
+<p>对应的符号部分为 0</p>
+<p>指数部分为 01111110，十进制数为126，用EXCESS系统表现就是 -1 (126 - 127)</p>
+<p>剩余为尾数 1.1000000000000000000000 基于正则表达式规则，将二进制数转为十进制数，结果为 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(1 * 2 的 0 次幂) + (1 * 2 的 -1 次幂) = 1.5</div><div class="line">因此 这个单精度浮点数表示的就是 “ +1.5 * 2 的 -1 次幂 ” = +0.75</div></pre></td></tr></table></figure>
+<h4 id="热身题-2-答案"><a href="#热身题-2-答案" class="headerlink" title="热身题 2)答案"></a>热身题 2)答案</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">1. 0.5 二进制数的小数点后第一位位权是 2的-1次幂，也就相当于</div><div class="line">   0.1 -&gt; 1 * 0.5  = 0.5 十进制数就是0.5</div><div class="line">2. 可以表示，转换成二进制数为0.101</div><div class="line">3. 浮点数  （符号 尾数 * 基数的指数次幂）</div><div class="line">4. 基数为2</div><div class="line">5. EXCESS</div><div class="line">6. AC.53 整数部分和小数部分一样，二进制数的4位相当于十六进制的1位</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/1481580-8beab4b0a0c6796f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/05/12/IOS网络请求之-NSURLSession/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.png" alt="asution deployment's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        youremail@email.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                主页
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    归档
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/05/">五月 2017<span class="sidebar_archives-count">9</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            主题 - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+        <a href="https://twitter.com/twitter" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-twitter.svg);">
+                <span class="visuallyhidden">Twitter</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/facebook" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+        <a href="https://www.google.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-gplus.svg);">
+                <span class="visuallyhidden">Google Plus</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;崔浩楠 Blog
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setTimeout(function(){
+            setInterval(function(){
+                queue.execNext();
+            },200);
+        },3000);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>
