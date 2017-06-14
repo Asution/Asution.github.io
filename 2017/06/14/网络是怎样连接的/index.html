@@ -96,7 +96,7 @@
 <meta property="og:url" content="http://asution.github.io/2017/06/14/网络是怎样连接的/index.html">
 <meta property="og:site_name" content="崔浩楠 Blog">
 <meta property="og:description" content="探索之旅看点1.当从浏览器中输入URL(Uniform Resource Locator)后，浏览器会从网址(URL)开始解析.2.根据解析后的数据来生成请求消息.3.浏览器”委托操作系统”向Web服务器发送请求并告诉系统接收方的IP地址(浏览器需要向DNS服务器查询域名对应的IP地址)4.全世界的上万台DNS服务器接力完成IP地址的查询5.查询IP地址后,向Web服务器发送消息 HTTP请求简介">
-<meta property="og:updated_time" content="2017-06-14T07:03:06.000Z">
+<meta property="og:updated_time" content="2017-06-14T07:31:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络是怎样连接的">
 <meta name="twitter:description" content="探索之旅看点1.当从浏览器中输入URL(Uniform Resource Locator)后，浏览器会从网址(URL)开始解析.2.根据解析后的数据来生成请求消息.3.浏览器”委托操作系统”向Web服务器发送请求并告诉系统接收方的IP地址(浏览器需要向DNS服务器查询域名对应的IP地址)4.全世界的上万台DNS服务器接力完成IP地址的查询5.查询IP地址后,向Web服务器发送消息 HTTP请求简介">
@@ -113,7 +113,7 @@
     motion: true,
     duoshuo: {
       userId: '0',
-      author: 'Penulis'
+      author: 'Author'
     },
     algolia: {
       applicationID: '',
@@ -209,7 +209,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Beranda
+            Home
           </a>
         </li>
       
@@ -219,7 +219,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Arsip
+            Archives
           </a>
         </li>
       
@@ -289,7 +289,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Diposting di</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-14T10:31:14+08:00">
                 2017-06-14
@@ -364,12 +364,13 @@
 </tbody>
 </table>
 <p>当网页信息为纯文字时,则直接显示到屏幕上,请求到此结束,如果还有图片资源需要显示,则在源码中插入标签,用来占用图片显示的位置并且向服务请求获取响应图片显示在预留空间中.<br>注:每一张图片都会向服务器请求一次,如3张图片,一个URI,则需要向服务器请求4次,请求与响应都是一对一的.</p>
-<h4 id="向DNS服务器查询域名-Web服务器对应的IP地址"><a href="#向DNS服务器查询域名-Web服务器对应的IP地址" class="headerlink" title="向DNS服务器查询域名/Web服务器对应的IP地址"></a>向DNS服务器查询域名/Web服务器对应的IP地址</h4><p>这里先做一个IP的简介: TCP/IP网络是由无数个子网组成,子网通过发送到集线器,转发到最近的路由器上,接下来会根据消息自动判断下一个要发送的路由器,通过不断的发送,最终到达指定路由器.而这个子网就是IP地址,如现实中的XX号XX室,相当于消息访问目标和地址.<br>tip: 在IP地址无法区分是网络号,主机号时通过<a href="https://zh.wikipedia.org/wiki/子网" target="_blank" rel="external">子网掩码</a>这种附加信息来区分.</p>
+<h4 id="向DNS服务器查询域名对应的IP地址"><a href="#向DNS服务器查询域名对应的IP地址" class="headerlink" title="向DNS服务器查询域名对应的IP地址"></a>向DNS服务器查询域名对应的IP地址</h4><p>这里先做一个IP的简介: TCP/IP网络是由无数个子网组成,子网通过发送到集线器,转发到最近的路由器上,接下来会根据消息自动判断下一个要发送的路由器,通过不断的发送,最终到达指定路由器.而这个子网就是IP地址,如现实中的XX号XX室,相当于消息访问目标和地址.<br>tip: 在IP地址无法区分是网络号,主机号时通过<a href="https://zh.wikipedia.org/wiki/子网" target="_blank" rel="external">子网掩码</a>这种附加信息来区分.</p>
 <p>这里还有一个<strong>效率问题</strong>,域名转换为IP地址提高了运行效率, 因为IP地址的长度为32比特(4字节),相对域名最短几十个字节,最长255字节而言,减少了路由器的负担,传送数据的时间也相对减少.</p>
 <p>在转换域名与IP地址之间的机制就称为DNS.<br>那么,DNS是如何查询IP的呢?其实很简单,就是调用包含在”Socket库”中的解析器来实现的,当我们通过DNS来查询IP时,通过将Socket中的解析器调用结果,存储到浏览器的内存中,待浏览器向Web服务器发送消息时, 从内存中取出对应的IP地址和HTTP一起返回给操作系统进行解析.<br>一句话来概括就是: <strong>域名查询IP地址时,浏览器会使用Socket库中的解析器</strong></p>
 <p>那么<strong>解析器</strong>内部是如何实现的?</p>
 <h4 id="解析器的内部实现原理"><a href="#解析器的内部实现原理" class="headerlink" title="解析器的内部实现原理"></a>解析器的内部实现原理</h4><p>这里进行一个简单的介绍:<br>1.浏览器/应用程序 存储的IP内存空间 = 使用高级编程语言,调用Socket库根据域名来调用方法<br>2.Scoket库生成发送给DNS服务器的查询消息<br>3.委托给操作系统内部协议栈将消息发送出去(操作系统内部网络控制软件,也叫 TCP/IP驱动 等)<br>4.通过网卡发送给DNS服务器<br>5.查询到结果后通过网卡返回查询结果并保存到内存中<br>6.继续执行下一行代码,待调用时机,在对应内存中取出查询到的IP地址</p>
 <p>tip: 只要是在DNS服务器中注册的,都可以作为Web服务器的域名来使用<br>一句话来概括就是: <strong>DNS服务器会从域名与IP地址的对照表中查找相应的记录并返回对应的IP地址</strong></p>
+<p>当查询请求提交到DNS服务器后,会先找到最近的DNS服务器进行查询,如果查询需要的IP地址存在根域中,那么,根据当前DNS服务器存储的根域信息向上查找IP地址,直到查到为止.<br>DNS服务器的优化处理:<br>1.通过上级DNS服务器查询出下级服务器的IP地址,也可以向上级发送查询请求<br>2.DNS服务器利用了分布式存储的方式<br>3.查询后的IP地址会进行缓存操作,并且会设置对应的缓存时间. 在查询响应时, DNS服务器会告知客户端是来自缓存或管理该域名的DNS服务器.</p>
 
       
     </div>
@@ -463,10 +464,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Daftar Isi
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Ikhtisar
+            Overview
           </li>
         </ul>
       
@@ -487,7 +488,7 @@
             <div class="site-state-item site-state-posts">
               <a href="/archives">
                 <span class="site-state-item-count">11</span>
-                <span class="site-state-item-name">posting</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -534,7 +535,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#探索之旅看点"><span class="nav-number">1.</span> <span class="nav-text">探索之旅看点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP请求"><span class="nav-number">2.</span> <span class="nav-text">HTTP请求</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">2.2.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求头"><span class="nav-number">2.3.</span> <span class="nav-text">请求头:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应头"><span class="nav-number">2.4.</span> <span class="nav-text">响应头:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向DNS服务器查询域名-Web服务器对应的IP地址"><span class="nav-number">2.5.</span> <span class="nav-text">向DNS服务器查询域名/Web服务器对应的IP地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解析器的内部实现原理"><span class="nav-number">2.6.</span> <span class="nav-text">解析器的内部实现原理</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#探索之旅看点"><span class="nav-number">1.</span> <span class="nav-text">探索之旅看点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP请求"><span class="nav-number">2.</span> <span class="nav-text">HTTP请求</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">2.2.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求头"><span class="nav-number">2.3.</span> <span class="nav-text">请求头:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应头"><span class="nav-number">2.4.</span> <span class="nav-text">响应头:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向DNS服务器查询域名对应的IP地址"><span class="nav-number">2.5.</span> <span class="nav-text">向DNS服务器查询域名对应的IP地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解析器的内部实现原理"><span class="nav-number">2.6.</span> <span class="nav-text">解析器的内部实现原理</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -570,7 +571,7 @@
 </div>
 
 <div class="theme-info">
-  Tema -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Muse
   </a>
