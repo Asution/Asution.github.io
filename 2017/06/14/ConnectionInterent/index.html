@@ -46,7 +46,7 @@
 <p>tip: 只要是在DNS服务器中注册的,都可以作为Web服务器的域名来使用<br>一句话来概括就是: <strong>DNS服务器会从域名与IP地址的对照表中查找相应的记录并返回对应的IP地址</strong></p>
 <p>当查询请求提交到DNS服务器后,会先找到最近的DNS服务器进行查询,如果查询需要的IP地址存在根域中,那么,根据当前DNS服务器存储的根域信息向上查找IP地址,直到查到为止.<br>DNS服务器的优化处理:<br>1.通过上级DNS服务器查询出下级服务器的IP地址,也可以向上级发送查询请求<br>2.DNS服务器利用了分布式存储的方式<br>3.查询后的IP地址会进行缓存操作,并且会设置对应的缓存时间. 在查询响应时, DNS服务器会告知客户端是来自缓存或管理该域名的DNS服务器.</p>
 <h3 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h3><h4 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h4><p>什么是套接字？<br>Web浏览器/应用程序 在与DNS服务器进行交互的时候,需要创建一个连接管道,用于它们之间的交互,传输信息等操作,而这个连接管道,其实就是套接字.<br>在它的内部可以在连接时在TCP模块处创建表示连接控制信息的头部,同时,通过TCP头部中的发送方和接收方端口号可以找到要连接的套接字.这也就是区分了同步网络情况下对应的套接字连接.</p>
-<h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><p><img src="http://upload-images.jianshu.io/upload_images/1481580-bafccc164e6b5118.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="网络连接图解"></p>
+<h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><p><img src="resource/httpConnection.gif" alt="网络连接图解"></p>
 <p>简单说一下连接建立的阶段 (后面两个阶段稍后做分析)<br>连接建立的阶段 : 当TCP头部创建好后委托IP模块将数据发送给服务器,服务器根据IP模块接收到数据后,根据传送过来的头信息找到对应的数据,使用套接字写入相关信息,并将状态改成正在连接.当完成套接字的连接后,服务器需要利用TCP模块返回响应,<strong>在服务器的TCP头部中设置发送方和接收方端口号以及SYN比特(如果某些原因无法接受连接,那么将不会设置SYN,而是将RST比特设置为1),此外,再返回响应时还需要将ACK控制位设置为1,表示已经收到响应网络包.</strong><br>那么为什么要设置这几个字段？<br>在网络连接的过程中可能会发生错误,发生丢失.因此双方进行通信必须确认网络包是否送达,而设置ACK比特就是用来进行这一确认.<br>接下来网络包会传输到客户端,用过IP模块到达TCP模块,通过TCP头部信息确认是否操作成功,如果SYN为1则表示成功.这时会向套接字写入一些信息,并将状态改为连接完毕(将ACK比特设置为1并回调给服务器告知响应包已经收到).客户端完成操作.</p>
 <p>tips:<br>当应用程序发送给协议栈的数据长度达不到MTU值时,需要等数据累积到一定量时再发送.当数据达不到要求并且间隔一定时间后,协议栈内存在一个计时器,会将网络包发出去.<br>(应用程序可以指定不等待填满缓冲出直接发送)<br>MTU: 一个网络报的最大长度, 以太网中一般为1500字节<br>MSS: 出去头部后, 一个网络所能容纳的TCP数据的最大长度.</p>
 <p>一句话来概括就是:通过 “序号” 和 “ACK号” 可以确认接收方是否收到网络包</p>
@@ -56,7 +56,7 @@
 <li>等待时间过短,可能发生重传了包之后,前面的ACK号才姗姗来迟 (如果最短时间无法正确测量,则有一个默认值,0.5 - 1之间)</li>
 </ol>
 <h4 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h4><p>那么在等到返回时间的时候,如果不进行任何的操作,这块时间将被浪费,为了减少这样的浪费,TCP采用了”滑动窗口”的方式来节省浪费的时间.<br>不等待ACK号返回,直接发送一系列包.</p>
-<p>滑动窗口 基本实现思路: 接收方会告知发送发自己的”包缓冲区” 最多可以接受多少比特的包数据,然后发送方根据这个峰值来进行包发送的控制操作.<br><img src="http://upload-images.jianshu.io/upload_images/1481580-07f11937e39a3a96.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="滑动窗口原理"></p>
+<p>滑动窗口 基本实现思路: 接收方会告知发送发自己的”包缓冲区” 最多可以接受多少比特的包数据,然后发送方根据这个峰值来进行包发送的控制操作.<br><img src="resource/Sliding.gif" alt="滑动窗口原理"></p>
 </div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://asution.github.io/2017/06/14/ConnectionInterent/" data-id="cj3y68j5m0000ku4ucdoh9i30" class="article-share-link">分享</a><div class="tags"></div><div class="post-nav"><a href="/2017/06/07/WWDC2017/" class="next">iOS开发者应该知道的</a></div><div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div><script>var cloudTieConfig = {
   url: document.location.href,
   sourceId: "",
