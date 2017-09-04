@@ -80,7 +80,7 @@
 <p>接着, 客户端收到FIN为1的TCP头部之后,会将自己的套接字标记为进入断开操作状态.然后为了通知服务器收到FIN包, 会向服务器返回一个ACK号. 操作完成后, 协议栈等待应用程序来取数据.</p>
 <p>到达此处后, 客户端会调用close来结束数据收发操作, 生成FIN比特为1的TCP包, 委托IP发送给服务器, 服务器会返回ACK号, 到此, 它们之间的通信就结束了.</p>
 <p>tip: 为了防止误操作, 套接字会等待几分钟后在删除, 防止新建套接字端口与已经删除的端口重复, 导致FIN发送错误.</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://asution.github.io/2017/06/14/ConnectionInterent/" data-id="cj6radxw100008l4ui85esu85" class="article-share-link">分享</a><div class="tags"><a href="/tags/网络相关/">网络相关</a></div><div class="post-nav"><a href="/2017/08/25/iOS中的-load与-initialize/" class="pre">iOS中的+load与+initialize</a><a href="/2017/06/07/WWDC2017/" class="next">iOS开发者应该知道的</a></div><div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div><script>var cloudTieConfig = {
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://asution.github.io/2017/06/14/ConnectionInterent/" data-id="cj75v2wuu0000084ueiiwnbyg" class="article-share-link">分享</a><div class="tags"><a href="/tags/网络相关/">网络相关</a></div><div class="post-nav"><a href="/2017/08/25/iOS中的-load与-initialize/" class="pre">iOS中的+load与+initialize</a><a href="/2017/06/07/WWDC2017/" class="next">iOS开发者应该知道的</a></div><div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div><script>var cloudTieConfig = {
   url: document.location.href,
   sourceId: "",
   productKey: "true",
